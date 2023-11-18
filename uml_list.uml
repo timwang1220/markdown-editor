@@ -1,0 +1,6 @@
+ListCommand --o Display
+interface Display{
+    + display(MarkdownComposite)
+}
+Display <|-- TextDisplay
+Display <|-- TreeDisplay
