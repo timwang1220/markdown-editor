@@ -1,0 +1,34 @@
+@startuml
+interface Command{
+    +execute()
+    +undo()
+    +redo()
+}
+Command <|-- FileCommand
+abstract FileCommand{
+    - static MarkdownFile operatingFile
+}
+FileCommand <|-- LoadCommand
+FileCommand <|-- SaveCommand
+FileCommand <|-- OperatingCommand
+class OperatingTuple{
+    - int lineNum
+    - MarkdownLine line
+}
+abstract OperatingCommand{
+    - ArrayList<OperatingTuple> operatingTuples
+}
+OperatingTuple --o OperatingCommand
+OperatingCommand <|-- InsertCommand
+OperatingCommand <|-- DeleteCommand
+OperatingCommand <|-- AppendCommand
+FileCommand <|-- ListCommand
+ListCommand <|-- ListTextCommand
+ListCommand <|-- ListTreeCommand
+abstract ListCommand{
+    - Display display
+}
+
+
+Command <|-- HistoryCommand
+@enduml

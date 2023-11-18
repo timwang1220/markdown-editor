@@ -1,0 +1,35 @@
+@startuml
+class MarkdownFile{
+    - String fileName
+    - MarkdownRoot root
+}
+MarkdownFile *-- MarkdownRoot
+interface MarkdownLine{
+    - Line
+    - Count
+    - Priority
+    - parent
+    + delete()
+    + toMdString()
+}
+MarkdownLine <|-- MarkdownContent
+MarkdownLine <|-- MarkdownComposite
+MarkdownContent <|-- MarkdownOrderedList 
+MarkdownContent <|-- MarkdownUnorderedList
+MarkdownComposite <|-- MarkdownRoot
+MarkdownComposite <|-- MarkdownTitle
+abstract MarkdownContent
+abstract MarkdownComposite{
+    - ArrayList<MarkdownLine> subLines
+    + insertLine(int, MarkdownLine)
+    + appendLine(MarkdownLine)
+    + acceptInsertLine(int)
+    + acceptDeleteLine(int)
+}
+class MarkdownOrderedList{
+    - int listOrder
+}
+class MarkdownUnorderedList{
+    - char listTag
+}
+@enduml

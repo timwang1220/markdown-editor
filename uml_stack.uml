@@ -1,0 +1,5 @@
+class CommandExecutor{
+    - stack<OperatingCommand> undoStack
+    - stack<OperatingCommand> redoStack
+    + execute(Command)
+}
