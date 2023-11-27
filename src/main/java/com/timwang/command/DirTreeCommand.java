@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import com.timwang.display.Display;
 import com.timwang.display.TreeDisplay;
 import com.timwang.markdown.MarkdownLine;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class DirTreeCommand extends FileCommand {
     private String dirTitle;
@@ -12,17 +13,18 @@ public class DirTreeCommand extends FileCommand {
     public DirTreeCommand(String args){
         dirTitle = args;
         dirTreeDisplay = new TreeDisplay();
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     };
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null)
+        if (operatingFile == null)
             throw new Exception("No file is loaded");
         if (dirTitle == "") {
-            dirTreeDisplay.display(FileCommand.operatingFile.getRoot());
+            dirTreeDisplay.display(operatingFile.getRoot());
         }
         else{
             LinkedHashMap<Integer, MarkdownLine> dirMap = new LinkedHashMap<Integer, MarkdownLine>();
-            FileCommand.operatingFile.getRoot().findByString(dirTitle, 0, dirMap);
+            operatingFile.getRoot().findByString(dirTitle, 0, dirMap);
             for (MarkdownLine line : dirMap.values()) {
                 dirTreeDisplay.display(line);
                 System.out.println("\n");

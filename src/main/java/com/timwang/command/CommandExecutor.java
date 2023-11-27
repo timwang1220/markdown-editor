@@ -2,9 +2,12 @@ package com.timwang.command;
 
 import java.util.Stack;
 
+import com.timwang.markdown.MarkdownFile;
+import com.timwang.workspace.WorkSpaceManager;
+
 public class CommandExecutor {
-    static Stack<OperatingCommand> undoStack;
-    static Stack<OperatingCommand> redoStack;
+    private Stack<OperatingCommand> undoStack;
+    private Stack<OperatingCommand> redoStack;
     private static CommandExecutor commandExecutor;
     private CommandExecutor(){
         undoStack = new Stack<OperatingCommand>();
@@ -17,9 +20,10 @@ public class CommandExecutor {
         return commandExecutor;
     }
     public void execute(Command command) throws Exception{
+        MarkdownFile operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         command.execute();
-        command.maintainStack();
         if (command instanceof OperatingCommand) {
+            operatingFile.setDirty();
             undoStack.push((OperatingCommand)command);
             redoStack.clear();
         }
@@ -30,6 +34,9 @@ public class CommandExecutor {
             OperatingCommand operatingCommand = undoStack.pop();
             operatingCommand.undo();
             redoStack.push(operatingCommand);
+            if (undoStack.isEmpty()) {
+                operatingFile.setClean();
+            }
         }
         if (command instanceof RedoCommand){
             if (redoStack.isEmpty()) {
@@ -38,8 +45,14 @@ public class CommandExecutor {
             OperatingCommand operatingCommand = redoStack.pop();
             operatingCommand.redo();
             undoStack.push(operatingCommand);
+            operatingFile.setDirty();
         }
-        if (command instanceof LoadCommand || command instanceof SaveCommand){
+        if (command instanceof LoadCommand){
+            // load command will change the workspace
+            undoStack = WorkSpaceManager.getActiveWorkSpace().getUndoStack();
+            redoStack = WorkSpaceManager.getActiveWorkSpace().getRedoStack();
+        }
+        if (command instanceof SaveCommand){
             undoStack.clear();
             redoStack.clear();
         }

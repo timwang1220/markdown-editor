@@ -13,6 +13,8 @@ import java.util.Map;
 import com.timwang.command.OperatingCommand;
 import com.timwang.markdown.MarkdownFile;
 import com.timwang.tools.Tools;
+import com.timwang.workspace.WorkSpace;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class Stat {
     private static Map<String, Duration> fileDuration = new HashMap<String, Duration>();
@@ -30,8 +32,8 @@ public class Stat {
 
 
     public static void writeStat() throws IOException{
-        if (OperatingCommand.getOperatingFile() != null)
-            closeFile(OperatingCommand.getOperatingFile());
+        if (WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() != null)
+            closeFile(WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() );
         try {
             Tools.createFileIFNotExists(statPath);
         } catch (Exception e) {

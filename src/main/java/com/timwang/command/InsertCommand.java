@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.timwang.markdown.MarkdownLine;
 import com.timwang.parser.StringToMDLine;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class InsertCommand extends OperatingCommand {
     private int lineNums;
@@ -19,42 +20,42 @@ public class InsertCommand extends OperatingCommand {
             this.lineNums = -1;       
         }
         this.operatingTuples = new ArrayList<OperatingTuple>();
-
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
 
 
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         } 
         MarkdownLine line = StringToMDLine.trans(content);
         if (lineNums == -1){
-            this.lineNums = FileCommand.operatingFile.append(line);
+            this.lineNums = operatingFile.append(line);
         }
         else{
-            FileCommand.operatingFile.insert(lineNums, line);
+            operatingFile.insert(lineNums, line);
         }
         this.operatingTuples.add(new OperatingTuple(lineNums, line));
     }
 
     @Override
     public void undo() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
         for (OperatingTuple operatingTuple : this.operatingTuples) {
-            FileCommand.operatingFile.deleteByLineNum(operatingTuple.getLineNum());
+            operatingFile.deleteByLineNum(operatingTuple.getLineNum());
         }
     }
 
     @Override
     public void redo() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
         for (OperatingTuple operatingTuple : this.operatingTuples) {
-            FileCommand.operatingFile.insert(operatingTuple.getLineNum(), operatingTuple.getContent());
+            operatingFile.insert(operatingTuple.getLineNum(), operatingTuple.getContent());
         }
     }
 

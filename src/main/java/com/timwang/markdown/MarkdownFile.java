@@ -14,11 +14,13 @@ public class MarkdownFile {
     private String filename;
     private MarkdownRoot root;
     private LocalDateTime openFileTime;
+    private boolean dirty;
 
     public MarkdownFile(String filename) throws Exception {
         openFileTime = LocalDateTime.now();
         this.filename = filename;
         this.root = new MarkdownRoot();
+        this.dirty = false;
         FileProcessor.initFile(filename, root);
     }
     public void insert(int lineNum, MarkdownLine line) throws Exception {
@@ -60,6 +62,15 @@ public class MarkdownFile {
     }
     public String getFilename(){
         return filename;
+    }
+    public boolean isDirty(){
+        return dirty;
+    }
+    public void setClean(){
+        this.dirty = false;
+    }
+    public void setDirty(){
+        this.dirty = true;
     }
 
 }

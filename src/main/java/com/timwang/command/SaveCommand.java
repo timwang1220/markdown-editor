@@ -1,20 +1,18 @@
 package com.timwang.command;
 
+import com.timwang.workspace.WorkSpaceManager;
+
 public class SaveCommand extends FileCommand {
     public SaveCommand(String args){
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         return;
     }
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
-        FileCommand.operatingFile.save();
+        operatingFile.save();
     }
     
-    @Override
-    public void maintainStack() throws Exception {
-        CommandExecutor.undoStack.clear();
-        CommandExecutor.redoStack.clear(); 
-    }
 }
