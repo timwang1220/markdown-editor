@@ -3,6 +3,7 @@ package com.timwang.command;
 import java.util.Stack;
 
 import com.timwang.markdown.MarkdownFile;
+import com.timwang.workspace.WorkSpace;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class CommandExecutor {
@@ -20,7 +21,8 @@ public class CommandExecutor {
         return commandExecutor;
     }
     public void execute(Command command) throws Exception{
-        MarkdownFile operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+        WorkSpace workSpace = WorkSpaceManager.getActiveWorkSpace();
+        MarkdownFile operatingFile = (workSpace == null) ? null : workSpace.getMarkdownFile();
         command.execute();
         if (command instanceof OperatingCommand) {
             operatingFile.setDirty();
@@ -53,8 +55,7 @@ public class CommandExecutor {
             redoStack = WorkSpaceManager.getActiveWorkSpace().getRedoStack();
         }
         if (command instanceof SaveCommand){
-            undoStack.clear();
-            redoStack.clear();
+            operatingFile.setClean();
         }
     }
 }

@@ -2,7 +2,6 @@ package com.timwang.workspace;
 
 import java.util.Stack;
 
-import com.timwang.command.Command;
 import com.timwang.command.OperatingCommand;
 import com.timwang.markdown.MarkdownFile;
 
@@ -14,7 +13,7 @@ public class WorkSpace {
     private Stack<OperatingCommand> redoStack;
     
     public WorkSpace(String name) throws Exception{
-        this.name = name;
+        this.name = name.split(".md")[0];
         this.markdownFile = new MarkdownFile(name);
         isActive = false;
         undoStack = new Stack<OperatingCommand>();

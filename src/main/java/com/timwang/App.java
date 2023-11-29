@@ -16,11 +16,11 @@ public class App {
             try {
                 System.out.print(">");
                 String input = System.console().readLine();
-                if (input.equals("exit") || input.equals("quit")) {
-                    System.out.println("Bye!");
-                    Stat.writeStat();
-                    return;
-                }
+                // if (input.equals("exit") || input.equals("quit")) {
+                //     System.out.println("Bye!");
+                //     //Stat.writeStat();
+                //     return;
+                // }
                 Command command = ArgstoCommand.getCommand(input);
                 CommandExecutor.getInstance().execute(command);
                 Log.addLog(input);

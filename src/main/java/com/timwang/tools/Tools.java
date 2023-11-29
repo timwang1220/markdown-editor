@@ -29,18 +29,25 @@ public final class Tools {
         return array;
     }
 
-    public static void createFileIFNotExists(String filePath) throws Exception {
-
+    public static void createFileIfNotExists(String filePath) throws Exception {
         // 检查文件路径是否存在
         File file = new File(filePath);
-        if (!file.exists()) {
-            try {
-                if (!file.createNewFile()) {
-                    throw new Exception("Error: Cannot create new File");
-                }
-            } catch (IOException e) {
+
+        // 获取文件的父目录
+        File parentDir = file.getParentFile();
+
+        if (parentDir != null && !parentDir.exists()) {
+            // 如果父目录不存在，则创建多级目录
+            if (!parentDir.mkdirs()) {
+                throw new Exception("Error: Cannot create directories for the file path");
+            }
+        }
+        try {
+            if (!file.exists() && !file.createNewFile()) {
                 throw new Exception("Error: Cannot create new File");
             }
+        } catch (IOException e) {
+            throw new Exception("Error: Cannot create new File");
         }
     }
 

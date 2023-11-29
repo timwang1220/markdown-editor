@@ -1,7 +1,7 @@
 package com.timwang.command;
 
-import com.timwang.display.Display;
-import com.timwang.display.TreeDisplay;
+import com.timwang.filedisplay.Display;
+import com.timwang.filedisplay.TreeDisplay;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class ListTreeCommand extends FileCommand{

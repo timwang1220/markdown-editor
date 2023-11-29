@@ -1,6 +1,5 @@
 package com.timwang.command;
 
-import com.timwang.markdown.MarkdownFile;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class LoadCommand extends FileCommand{

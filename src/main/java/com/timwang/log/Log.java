@@ -27,7 +27,7 @@ public class Log {
     private static void writeLog(String log) throws IOException {
         // if logPath not exists, create it
         try {
-            Tools.createFileIFNotExists(logPath);
+            Tools.createFileIfNotExists(logPath);
         } catch (Exception e) {
             throw new IOException("Creating LogFile Error.");
         }

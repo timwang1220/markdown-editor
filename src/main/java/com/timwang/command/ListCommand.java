@@ -1,7 +1,7 @@
 package com.timwang.command;
 
-import com.timwang.display.Display;
-import com.timwang.display.ListDisplay;
+import com.timwang.filedisplay.Display;
+import com.timwang.filedisplay.ListDisplay;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class ListCommand extends FileCommand {

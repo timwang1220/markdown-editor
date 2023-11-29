@@ -35,7 +35,7 @@ public class Stat {
         if (WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() != null)
             closeFile(WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() );
         try {
-            Tools.createFileIFNotExists(statPath);
+            Tools.createFileIfNotExists(statPath);
         } catch (Exception e) {
             throw new IOException("Creating StatFile Error.");
         }

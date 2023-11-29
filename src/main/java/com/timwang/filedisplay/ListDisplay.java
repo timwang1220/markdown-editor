@@ -1,4 +1,4 @@
-package com.timwang.display;
+package com.timwang.filedisplay;
 
 import com.timwang.markdown.MarkdownComposite;
 import com.timwang.markdown.MarkdownLine;

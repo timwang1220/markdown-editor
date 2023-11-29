@@ -9,6 +9,7 @@ import com.timwang.command.AppendTailCommand;
 import com.timwang.command.Command;
 import com.timwang.command.DeleteCommand;
 import com.timwang.command.DirTreeCommand;
+import com.timwang.command.ExitCommand;
 import com.timwang.command.HistoryCommand;
 import com.timwang.command.InsertCommand;
 import com.timwang.command.ListCommand;
@@ -36,6 +37,8 @@ public class ArgstoCommand {
         commandMap.put("redo",RedoCommand::new);
         commandMap.put("history", HistoryCommand::new);
         commandMap.put("stats", StatCommand::new);
+        commandMap.put("exit", ExitCommand::new);
+        
     }
 
     public static Command getCommand(String args) throws Exception {
