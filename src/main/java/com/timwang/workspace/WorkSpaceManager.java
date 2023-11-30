@@ -19,13 +19,13 @@ public class WorkSpaceManager {
         throw new RuntimeException("No such workspace");
     }
 
-    public static void newWorkSpace(String workSpaceName) throws Exception {
+    public static void newWorkSpace(String fileName) throws Exception {
         for (WorkSpace workSpace : workSpaces) {
-            if (workSpace.getName().equals(workSpaceName)) {
+            if (workSpace.getMarkdownFile().getFilename().equals(fileName)) {
                 throw new Exception("WorkSpace already exists");
             }
         }
-        WorkSpace workSpace = new WorkSpace(workSpaceName);
+        WorkSpace workSpace = new WorkSpace(fileName);
         workSpaces.add(workSpace);
         if (activeWorkSpace != null) activeWorkSpace.setActive(false);
         activeWorkSpace = workSpace;

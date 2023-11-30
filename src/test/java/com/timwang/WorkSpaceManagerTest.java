@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class WorkSpaceManagerTest {
 
-    static final String RelativePath = "./test/resources/";
+    static final String RelativePath = "./test-dir/";
 
     @Before
     public void setUp() throws Exception {
@@ -32,9 +32,9 @@ public class WorkSpaceManagerTest {
         String workSpace2 = RelativePath + "Workspace2";
         String workSpace3 = RelativePath + "Workspace3";
 
-        WorkSpaceManager.newWorkSpace(workSpace1);
-        WorkSpaceManager.newWorkSpace(workSpace2);
-        WorkSpaceManager.newWorkSpace(workSpace3);
+        WorkSpaceManager.newWorkSpace(workSpace1 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace2 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace3 + ".md");
 
         WorkSpaceManager.switchWorkSpace(workSpace2);
 
@@ -49,7 +49,7 @@ public class WorkSpaceManagerTest {
     @Test
     public void testNewWorkSpace() throws Exception {
         String workSpaceName = RelativePath + "NewWorkspace";
-        WorkSpaceManager.newWorkSpace(workSpaceName);
+        WorkSpaceManager.newWorkSpace(workSpaceName + ".md");
 
         ArrayList<WorkSpace> workSpaces = WorkSpaceManager.getAllWorkSpaces();
         assertEquals(1, workSpaces.size());
@@ -63,8 +63,8 @@ public class WorkSpaceManagerTest {
     @Test(expected = Exception.class)
     public void testNewWorkSpace_WorkspaceAlreadyExists() throws Exception {
         String workSpaceName = RelativePath + "ExistingWorkspace";
-        WorkSpaceManager.newWorkSpace(workSpaceName);
-        WorkSpaceManager.newWorkSpace(workSpaceName);
+        WorkSpaceManager.newWorkSpace(workSpaceName + ".md");
+        WorkSpaceManager.newWorkSpace(workSpaceName + ".md");
     }
 
     @Test(expected = Exception.class)
@@ -75,7 +75,7 @@ public class WorkSpaceManagerTest {
     @Test
     public void testCloseCurrentWorkSpace_SaveCurrentWorkspace() throws Exception {
         String workSpace = RelativePath + "Workspace";
-        WorkSpaceManager.newWorkSpace(workSpace);
+        WorkSpaceManager.newWorkSpace(workSpace + ".md");
 
         WorkSpaceManager.getActiveWorkSpace().getMarkdownFile().setDirty();
 
@@ -92,7 +92,7 @@ public class WorkSpaceManagerTest {
     @Test
     public void testCloseCurrentWorkSpace_DiscardCurrentWorkspace() throws Exception {
         String workSpace = RelativePath + "Workspace";
-        WorkSpaceManager.newWorkSpace(workSpace);
+        WorkSpaceManager.newWorkSpace(workSpace + ".md");
 
         WorkSpaceManager.getActiveWorkSpace().getMarkdownFile().setDirty();
 
@@ -112,9 +112,9 @@ public class WorkSpaceManagerTest {
         String workSpace2 = RelativePath + "Workspace2";
         String workSpace3 = RelativePath + "Workspace3";
 
-        WorkSpaceManager.newWorkSpace(workSpace1);
-        WorkSpaceManager.newWorkSpace(workSpace2);
-        WorkSpaceManager.newWorkSpace(workSpace3);
+        WorkSpaceManager.newWorkSpace(workSpace1 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace2 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace3 + ".md");
 
         WorkSpaceManager.closeAllWorkSpace();
 
@@ -128,9 +128,9 @@ public class WorkSpaceManagerTest {
         String workSpace2 = RelativePath + "Workspace2";
         String workSpace3 = RelativePath + "Workspace3";
 
-        WorkSpaceManager.newWorkSpace(workSpace1);
-        WorkSpaceManager.newWorkSpace(workSpace2);
-        WorkSpaceManager.newWorkSpace(workSpace3);
+        WorkSpaceManager.newWorkSpace(workSpace1 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace2 + ".md");
+        WorkSpaceManager.newWorkSpace(workSpace3 + ".md");
 
         WorkSpaceManager.switchWorkSpace(workSpace2);
         WorkSpaceManager.getActiveWorkSpace().getMarkdownFile().setDirty();

@@ -14,7 +14,9 @@ import com.timwang.command.HistoryCommand;
 import com.timwang.command.InsertCommand;
 import com.timwang.command.ListCommand;
 import com.timwang.command.ListTreeCommand;
+import com.timwang.command.ListWorkSpaceCommand;
 import com.timwang.command.LoadCommand;
+import com.timwang.command.OpenCommand;
 import com.timwang.command.RedoCommand;
 import com.timwang.command.SaveCommand;
 import com.timwang.command.StatCommand;
@@ -38,6 +40,8 @@ public class ArgstoCommand {
         commandMap.put("history", HistoryCommand::new);
         commandMap.put("stats", StatCommand::new);
         commandMap.put("exit", ExitCommand::new);
+        commandMap.put("open", OpenCommand::new);
+        commandMap.put("list-workspace", ListWorkSpaceCommand::new);
         
     }
 
