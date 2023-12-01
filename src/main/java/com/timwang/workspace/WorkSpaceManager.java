@@ -3,8 +3,12 @@ package com.timwang.workspace;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.timwang.memento.WorkSpaceMemento;
+
+
+
 public class WorkSpaceManager {
-    private static ArrayList<WorkSpace> workSpaces = new ArrayList<WorkSpace>();
+    private static ArrayList<WorkSpace> workSpaces;
     private static WorkSpace activeWorkSpace;
 
     public static void switchWorkSpace(String workSpaceName) {
@@ -88,12 +92,15 @@ public class WorkSpaceManager {
             }
             workSpace.getMarkdownFile().close();
         }
+        if (saveOption == SaveOption.SAVE) {
+            backUp().saveToDisk();
+        }
         workSpaces.clear();
         activeWorkSpace = null;
     }
 
     public static void clear() {
-        workSpaces.clear();
+        workSpaces = new ArrayList<WorkSpace>();
         activeWorkSpace = null;
     }
 
@@ -111,5 +118,24 @@ public class WorkSpaceManager {
             System.out.print(ouString + "\n");
         }
     }
+
+    public static WorkSpaceMemento backUp() throws Exception{
+        return new WorkSpaceMemento(workSpaces, activeWorkSpace);
+    }
+
+   
+
+    public static void init() {
+        WorkSpaceMemento memento = WorkSpaceMemento.recoverFromJsonFile();
+        if (memento == null) {
+            workSpaces = new ArrayList<WorkSpace>();
+            activeWorkSpace = null;
+            return;
+        }
+        workSpaces = memento.getWorkSpaces();
+        activeWorkSpace = memento.getActiveWorkSpace();
+
+    }
+
 
 }

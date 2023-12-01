@@ -12,6 +12,7 @@ import com.timwang.command.DirTreeCommand;
 import com.timwang.command.ExitCommand;
 import com.timwang.command.HistoryCommand;
 import com.timwang.command.InsertCommand;
+import com.timwang.command.LSCommand;
 import com.timwang.command.ListCommand;
 import com.timwang.command.ListTreeCommand;
 import com.timwang.command.ListWorkSpaceCommand;
@@ -42,6 +43,7 @@ public class ArgstoCommand {
         commandMap.put("exit", ExitCommand::new);
         commandMap.put("open", OpenCommand::new);
         commandMap.put("list-workspace", ListWorkSpaceCommand::new);
+        commandMap.put("ls", LSCommand::new);
         
     }
 

@@ -5,6 +5,7 @@ import com.timwang.command.CommandExecutor;
 import com.timwang.log.Log;
 import com.timwang.log.Stat;
 import com.timwang.parser.ArgstoCommand;
+import com.timwang.workspace.WorkSpaceManager;
 
 /**
  * Hello world!
@@ -12,6 +13,7 @@ import com.timwang.parser.ArgstoCommand;
  */
 public class App {
     public static void main(String[] args){
+        WorkSpaceManager.init();
         while (true) {
             try {
                 System.out.print(">");

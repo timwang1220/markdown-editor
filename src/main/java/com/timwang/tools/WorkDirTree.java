@@ -44,13 +44,4 @@ public class WorkDirTree {
         }
         return indentation.toString();
     }
-
-    public static void main(String[] args) {
-        // Specify the directory path
-        String directoryPath = "./sample_dir"; // Current directory
-
-        // List Markdown files in tree format
-        System.out.println("Markdown Files in Tree Format:");
-        listMarkdownFiles(directoryPath);
-    }
 }

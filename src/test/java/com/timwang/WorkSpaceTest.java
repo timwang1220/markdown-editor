@@ -18,7 +18,7 @@ public class WorkSpaceTest {
 
     @Before
     public void setUp() throws Exception {
-        workSpace = new WorkSpace("./test/resources/TestWorkspace");
+        workSpace = new WorkSpace("./src/test/resources/TestWorkspace");
     }
 
     @Test
@@ -28,7 +28,7 @@ public class WorkSpaceTest {
 
     @Test
     public void testGetName() {
-        assertEquals("./test/resources/TestWorkspace", workSpace.getName());
+        assertEquals("./src/test/resources/TestWorkspace", workSpace.getName());
     }
 
     @Test

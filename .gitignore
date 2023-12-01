@@ -25,6 +25,6 @@ replay_pid*
 
 target/
 
-test/resources/
+src/test/resources/
 
-test-dir/
+test_dir/
