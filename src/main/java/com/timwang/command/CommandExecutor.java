@@ -1,18 +1,27 @@
 package com.timwang.command;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import com.timwang.markdown.MarkdownFile;
+import com.timwang.observer.Observer;
 import com.timwang.workspace.WorkSpace;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class CommandExecutor {
     private Stack<OperatingCommand> undoStack;
     private Stack<OperatingCommand> redoStack;
+    private ArrayList<Observer> observers;
     private static CommandExecutor commandExecutor;
     private CommandExecutor(){
         undoStack = new Stack<OperatingCommand>();
         redoStack = new Stack<OperatingCommand>();
+        observers = new ArrayList<Observer>();
+    }
+    private void notifyObservers(Command command){
+        for (Observer observer : observers) {
+            observer.update(command);
+        }
     }
     public static CommandExecutor getInstance(){
         if (commandExecutor == null) {
@@ -57,5 +66,6 @@ public class CommandExecutor {
         if (command instanceof SaveCommand){
             operatingFile.setClean();
         }
+        notifyObservers(command);
     }
 }

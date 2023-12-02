@@ -24,6 +24,9 @@ public class DeleteCommand extends OperatingCommand{
         this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
 
+    public DeleteCommand(ArrayList<OperatingTuple> operatingTuples){
+        super(operatingTuples);
+    }
 
 
     @Override

@@ -48,10 +48,12 @@ public class WorkSpaceMemento implements Memento {
     // }
     public String toJsonString(){
         JSONArray jsonArray = new JSONArray();
-        jsonArray.addAll(workSpaces);
+        for (WorkSpace workSpace : workSpaces) {
+            jsonArray.add(workSpace.toJsonString());
+        }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("workspaces", jsonArray);
-        jsonObject.put("activeworkspace", activeWorkSpace);
+        jsonObject.put("activeworkspace", activeWorkSpace.toJsonString());
         return jsonObject.toJSONString();
     }
 

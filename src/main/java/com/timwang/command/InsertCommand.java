@@ -23,6 +23,10 @@ public class InsertCommand extends OperatingCommand {
         this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
 
+    public InsertCommand(ArrayList<OperatingTuple> operatingTuples) {
+        super(operatingTuples);
+    }
+
 
     @Override
     public void execute() throws Exception {

@@ -13,6 +13,9 @@ public class AppendHeadCommand extends OperatingCommand{
         this.content = args;
         this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
+    public AppendHeadCommand(ArrayList<OperatingTuple> operatingTuples){
+        super(operatingTuples);
+    }
  
     @Override
     public void execute() throws Exception {

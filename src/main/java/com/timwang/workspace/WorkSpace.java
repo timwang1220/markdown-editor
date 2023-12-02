@@ -3,6 +3,7 @@ package com.timwang.workspace;
 import java.io.Serializable;
 import java.util.Stack;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.timwang.command.OperatingCommand;
@@ -56,8 +57,34 @@ public class WorkSpace implements Serializable{
         JSONObject jsonObject = JSONObject.parseObject(jsonString);
         WorkSpace workSpace = new WorkSpace(jsonObject.getString("name") + ".md");
         workSpace.isActive = jsonObject.getBoolean("active");
-        System.out.println(workSpace.getName());
-        System.out.println(workSpace.getMarkdownFile().getFilename());
+        JSONArray undoStackJsonArray = jsonObject.getJSONArray("undoStack");
+        JSONArray redoStackJsonArray = jsonObject.getJSONArray("redoStack");
+        for (Object object : undoStackJsonArray) {
+            OperatingCommand operatingCommand = OperatingCommand.fromJsonString(object.toString());
+            workSpace.undoStack.push(operatingCommand);
+        }
+        for (Object object : redoStackJsonArray) {
+            OperatingCommand operatingCommand = OperatingCommand.fromJsonString(object.toString());
+            workSpace.redoStack.push(operatingCommand);
+        }
         return workSpace;      
+    }
+
+    public String toJsonString() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", name);
+        jsonObject.put("active", isActive);
+        jsonObject.put("undostacksize", undoStack.size());
+        JSONArray undoStackJsonArray = new JSONArray();
+        for (OperatingCommand operatingCommand : undoStack) {
+            undoStackJsonArray.add(operatingCommand.toJsonString());
+        }
+        JSONArray redoStackJsonArray = new JSONArray();
+        for (OperatingCommand operatingCommand : redoStack) {
+            redoStackJsonArray.add(operatingCommand.toJsonString());
+        }
+        jsonObject.put("undoStack", undoStackJsonArray);
+        jsonObject.put("redoStack", redoStackJsonArray);
+        return jsonObject.toJSONString();
     }
 }
