@@ -7,6 +7,5 @@ public class ExitCommand implements Command{
     @Override
     public void execute() throws Exception {
         WorkSpaceManager.closeAllWorkSpace();
-        System.exit(0);
     }
 }

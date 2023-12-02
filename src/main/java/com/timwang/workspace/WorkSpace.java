@@ -21,6 +21,9 @@ public class WorkSpace implements Serializable{
     @JSONField(serialize = false)
     private Stack<OperatingCommand> redoStack;
 
+    @JSONField(serialize = false)
+    private Stack<String> historyStack;
+
     public WorkSpace(String name) throws Exception {
         this.name = name.split(".md")[0];
         this.markdownFile = new MarkdownFile(name);
@@ -87,4 +90,13 @@ public class WorkSpace implements Serializable{
         jsonObject.put("redoStack", redoStackJsonArray);
         return jsonObject.toJSONString();
     }
+
+    public Stack<String> getHistoryStack() {
+        return historyStack;
+    }
+
+    public void pushHistory(String history) {
+        historyStack.push(history);
+    }
+
 }

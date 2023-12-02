@@ -53,7 +53,6 @@ public class WorkSpaceManager {
             activeWorkSpace.getMarkdownFile().setClean();
         }
         activeWorkSpace.setActive(false);
-        activeWorkSpace.getMarkdownFile().close();
         workSpaces.remove(activeWorkSpace);
         WorkSpace workSpace = activeWorkSpace;
         activeWorkSpace = null;
@@ -72,6 +71,7 @@ public class WorkSpaceManager {
         SAVE, DISCARD, UNSET
     }
     public static void closeAllWorkSpace() throws Exception {
+        WorkSpaceMemento memento = backUp();
         SaveOption saveOption = SaveOption.UNSET;
         for (WorkSpace workSpace : workSpaces) {
             if (workSpace.getMarkdownFile().isDirty()) {
@@ -90,10 +90,9 @@ public class WorkSpaceManager {
                     workSpace.getMarkdownFile().save();
                 }
             }
-            workSpace.getMarkdownFile().close();
         }
-        if (saveOption == SaveOption.SAVE) {
-            backUp().saveToDisk();
+        if (saveOption == SaveOption.SAVE || saveOption == SaveOption.UNSET) {
+            memento.saveToDisk();
         }
         workSpaces.clear();
         activeWorkSpace = null;

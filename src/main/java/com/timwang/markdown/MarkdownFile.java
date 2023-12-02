@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
-import com.timwang.log.Stat;
 import com.timwang.processor.FileProcessor;
 
 public class MarkdownFile {
@@ -35,6 +34,12 @@ public class MarkdownFile {
         root.appendLine(line);
         return root.getLineCount();
     }
+
+    public void updateOpenTime(){
+        openFileTime = LocalDateTime.now();
+    }    
+
+
     public MarkdownLine deleteByLineNum(int lineNum) throws Exception{
         return root.deleteByLineNum(lineNum);
     }
@@ -47,9 +52,6 @@ public class MarkdownFile {
         }
         root.deleteByString(line, getFileLine());
         return lineMap;
-    }
-    public void close(){
-        Stat.closeFile(this);
     }
     public int getFileLine(){
         return root.getLineCount();

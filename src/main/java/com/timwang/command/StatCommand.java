@@ -1,6 +1,5 @@
 package com.timwang.command;
 
-import com.timwang.log.Stat;
 import com.timwang.workspace.WorkSpaceManager;
 
 public class StatCommand extends FileCommand{
@@ -12,17 +11,14 @@ public class StatCommand extends FileCommand{
         }
         this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
-
+    public boolean isShowCurrent() {
+        return showCurrent;
+    }
 
     @Override
     public void execute() throws Exception {
         if (operatingFile == null) {
             throw new Exception("No file has been opened.");
-        }
-        if (showCurrent) {
-            Stat.showCurrentState(operatingFile);
-        } else {
-            Stat.showAllState(operatingFile);
         }
     }
     

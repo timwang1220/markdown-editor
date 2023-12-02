@@ -1,4 +1,4 @@
-package com.timwang.log;
+package com.timwang.observer;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -10,28 +10,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.timwang.command.CloseCommand;
+import com.timwang.command.Command;
+import com.timwang.command.ExitCommand;
+import com.timwang.command.LoadCommand;
+import com.timwang.command.OpenCommand;
+import com.timwang.command.StatCommand;
 import com.timwang.markdown.MarkdownFile;
 import com.timwang.tools.Tools;
 import com.timwang.workspace.WorkSpaceManager;
 
-public class Stat {
-    private static Map<String, Duration> fileDuration = new HashMap<String, Duration>();
-    private static LocalDateTime startTime = LocalDateTime.now();
-    private static DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
-    private static String statPath = "./log/stat.log";
-    public static void closeFile(MarkdownFile markdownFile) {
-        Duration duration = Duration.between(markdownFile.getOpenFileTime(), java.time.LocalDateTime.now());
-        if (fileDuration.containsKey(markdownFile.getFilename())) {
-            Duration oldDuration = fileDuration.get(markdownFile.getFilename());
+public class StatObserver implements Observer{
+    private Map<String, Duration> fileDuration = new HashMap<String, Duration>();
+    private LocalDateTime startTime = LocalDateTime.now();
+    private DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
+    private String statPath = "./log/stat.log";
+    private MarkdownFile currentOpenFile = null;
+
+    private void openFile(MarkdownFile markdownFile) {
+        if (currentOpenFile != null) closeCurrentFile();
+        currentOpenFile = markdownFile;
+        markdownFile.updateOpenTime();
+    }
+    private void closeCurrentFile() {
+        Duration duration = Duration.between(currentOpenFile.getOpenFileTime(), java.time.LocalDateTime.now());
+        if (fileDuration.containsKey(currentOpenFile.getFilename())) {
+            Duration oldDuration = fileDuration.get(currentOpenFile.getFilename());
             duration = duration.plus(oldDuration);
         }
-        fileDuration.put(markdownFile.getFilename(), duration);
+        fileDuration.put(currentOpenFile.getFilename(), duration);
+        currentOpenFile = null;
     }
 
 
-    public static void writeStat() throws IOException{
-        if (WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() != null)
-            closeFile(WorkSpaceManager.getActiveWorkSpace().getMarkdownFile() );
+    private void writeStat() throws IOException{
+        if (currentOpenFile != null) closeCurrentFile();
         try {
             Tools.createFileIfNotExists(statPath);
         } catch (Exception e) {
@@ -51,7 +64,7 @@ public class Stat {
         }
     }
 
-    public static void showCurrentState(MarkdownFile markdownFile){
+    private void showCurrentState(MarkdownFile markdownFile){
         Duration duration = Duration.between(markdownFile.getOpenFileTime(), java.time.LocalDateTime.now());
         if (fileDuration.containsKey(markdownFile.getFilename())) {
             Duration oldDuration = fileDuration.get(markdownFile.getFilename());
@@ -62,7 +75,7 @@ public class Stat {
     }
 
 
-    public static void showAllState(MarkdownFile nowFile){
+    private void showAllState(MarkdownFile nowFile){
         String startLog = "session start at "+ startTime.format(formatter);
         System.out.println(startLog);
         for (String filename : fileDuration.keySet()) {
@@ -77,6 +90,35 @@ public class Stat {
             Duration duration = Duration.between(nowFile.getOpenFileTime(), java.time.LocalDateTime.now());
             String stat = nowFile.getFilename() + " " + Tools.durationToString(duration);
             System.out.println(stat);
+        }
+    }
+
+
+    @Override
+    public void update(Command command) {
+        if (command instanceof StatCommand){
+            StatCommand statCommand = (StatCommand)command;
+            if (statCommand.isShowCurrent()) {
+                showCurrentState(WorkSpaceManager.getActiveWorkSpace().getMarkdownFile());
+            } else {
+                showAllState(WorkSpaceManager.getActiveWorkSpace().getMarkdownFile());
+            }
+        }
+        if (command instanceof OpenCommand || command instanceof LoadCommand){
+            MarkdownFile markdownFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+            if (markdownFile != null) {
+                openFile(markdownFile);
+            }           
+        }
+        if (command instanceof CloseCommand){
+            closeCurrentFile();
+        }
+        if (command instanceof ExitCommand){
+            try {
+                writeStat();
+            } catch (IOException e) {
+                System.out.println("Writing StatFile Error.\n");
+            }
         }
     }
 }

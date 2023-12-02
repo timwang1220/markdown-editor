@@ -21,7 +21,6 @@ public class DeleteCommand extends OperatingCommand{
             deleteLineNum = -1;
         }
         this.operatingTuples = new ArrayList<OperatingTuple>();
-        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
 
     public DeleteCommand(ArrayList<OperatingTuple> operatingTuples){
@@ -31,6 +30,7 @@ public class DeleteCommand extends OperatingCommand{
 
     @Override
     public void execute() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
@@ -50,6 +50,7 @@ public class DeleteCommand extends OperatingCommand{
 
     @Override
     public void undo() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
@@ -64,6 +65,7 @@ public class DeleteCommand extends OperatingCommand{
 
     @Override
     public void redo() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }

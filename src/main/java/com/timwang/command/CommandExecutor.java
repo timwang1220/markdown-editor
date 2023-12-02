@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import com.timwang.markdown.MarkdownFile;
 import com.timwang.observer.Observer;
+import com.timwang.observer.StatObserver;
 import com.timwang.workspace.WorkSpace;
 import com.timwang.workspace.WorkSpaceManager;
 
@@ -13,19 +14,26 @@ public class CommandExecutor {
     private Stack<OperatingCommand> redoStack;
     private ArrayList<Observer> observers;
     private static CommandExecutor commandExecutor;
-    private CommandExecutor(){
-        undoStack = new Stack<OperatingCommand>();
-        redoStack = new Stack<OperatingCommand>();
+    private CommandExecutor(Stack<OperatingCommand> undoStack, Stack<OperatingCommand> redoStack){
+        this.undoStack = undoStack;
+        this.redoStack = redoStack;
         observers = new ArrayList<Observer>();
+        observers.add(new StatObserver());
     }
     private void notifyObservers(Command command){
         for (Observer observer : observers) {
             observer.update(command);
         }
     }
+    public static void clear(){
+        commandExecutor = null;
+    }
     public static CommandExecutor getInstance(){
         if (commandExecutor == null) {
-            commandExecutor = new CommandExecutor();
+            if (WorkSpaceManager.getActiveWorkSpace() == null) {
+                commandExecutor = new CommandExecutor(null, null);
+            }
+            else commandExecutor = new CommandExecutor(WorkSpaceManager.getActiveWorkSpace().getUndoStack(), WorkSpaceManager.getActiveWorkSpace().getRedoStack());
         }
         return commandExecutor;
     }
@@ -58,14 +66,22 @@ public class CommandExecutor {
             undoStack.push(operatingCommand);
             operatingFile.setDirty();
         }
-        if (command instanceof LoadCommand){
+        if (command instanceof LoadCommand || command instanceof OpenCommand){
             // load command will change the workspace
             undoStack = WorkSpaceManager.getActiveWorkSpace().getUndoStack();
             redoStack = WorkSpaceManager.getActiveWorkSpace().getRedoStack();
         }
+        if (command instanceof CloseCommand){
+            undoStack = new Stack<OperatingCommand>();
+            redoStack = new Stack<OperatingCommand>();
+        }
         if (command instanceof SaveCommand){
             operatingFile.setClean();
         }
+
         notifyObservers(command);
+        if (command instanceof ExitCommand){
+            System.exit(0);
+        }
     }
 }

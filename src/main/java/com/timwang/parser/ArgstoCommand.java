@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import com.timwang.command.AppendHeadCommand;
 import com.timwang.command.AppendTailCommand;
+import com.timwang.command.CloseCommand;
 import com.timwang.command.Command;
 import com.timwang.command.DeleteCommand;
 import com.timwang.command.DirTreeCommand;
@@ -44,6 +45,7 @@ public class ArgstoCommand {
         commandMap.put("open", OpenCommand::new);
         commandMap.put("list-workspace", ListWorkSpaceCommand::new);
         commandMap.put("ls", LSCommand::new);
+        commandMap.put("close", CloseCommand::new);
         
     }
 

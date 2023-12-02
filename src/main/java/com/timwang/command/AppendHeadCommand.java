@@ -11,7 +11,7 @@ public class AppendHeadCommand extends OperatingCommand{
     public AppendHeadCommand(String args){
         this.operatingTuples = new ArrayList<OperatingTuple>();
         this.content = args;
-        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+        
     }
     public AppendHeadCommand(ArrayList<OperatingTuple> operatingTuples){
         super(operatingTuples);
@@ -19,6 +19,7 @@ public class AppendHeadCommand extends OperatingCommand{
  
     @Override
     public void execute() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
@@ -28,6 +29,7 @@ public class AppendHeadCommand extends OperatingCommand{
     }
     @Override
     public void undo() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
@@ -36,6 +38,7 @@ public class AppendHeadCommand extends OperatingCommand{
     }
     @Override
     public void redo() throws Exception {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
         if (operatingFile == null) {
             throw new Exception("No file is opening");
         }

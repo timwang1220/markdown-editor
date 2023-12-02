@@ -58,7 +58,9 @@ public class WorkSpaceMemento implements Memento {
     }
 
     private static WorkSpaceMemento fromJsonString(String jsonString) throws Exception{
-        System.out.println(jsonString);
+        if (jsonString == null) {
+            return null;
+        }
         WorkSpaceMemento memento = new WorkSpaceMemento();
         JSONObject jsonObject = JSON.parseObject(jsonString);
         String activeWorkSpaceString = jsonObject.getString("activeworkspace");
