@@ -5,6 +5,8 @@ import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import com.timwang.workspace.WorkSpaceManager;
+
 public class WorkDirTree {
     private static boolean Last[] = new boolean[100];
     public static void listMarkdownFiles(String directory) {
@@ -32,7 +34,11 @@ public class WorkDirTree {
         } else if (dir.isFile() && dir.getName().toLowerCase().endsWith(".md")) {
             // Print the file path with indentation based on depth
             String filename = dir.toString().split(Pattern.quote("\\"))[dir.toString().split(Pattern.quote("\\")).length - 1];
-            System.out.println(getIndentation(depth) + header + filename);
+            String oString = getIndentation(depth) + header + filename;
+            if (WorkSpaceManager.isOpen(filename.split(".md")[0].trim())) {
+                oString += " *";
+            }
+            System.out.println(oString);
         }
     }
 

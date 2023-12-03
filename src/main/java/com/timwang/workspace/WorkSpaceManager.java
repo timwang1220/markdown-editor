@@ -14,7 +14,7 @@ public class WorkSpaceManager {
     public static void switchWorkSpace(String workSpaceName) {
         for (WorkSpace workSpace : workSpaces) {
             if (workSpace.getName().equals(workSpaceName)) {
-                activeWorkSpace.setActive(false);
+                if (activeWorkSpace != null) activeWorkSpace.setActive(false);
                 activeWorkSpace = workSpace;
                 workSpace.setActive(true);
                 return;
@@ -43,12 +43,10 @@ public class WorkSpaceManager {
         if (activeWorkSpace.getMarkdownFile().isDirty()) {
 
             System.out.println("Do you want to save the current workspace [Y\\N] ?");
-            Scanner scanner = new Scanner(System.in);
-            char userInput = scanner.next().charAt(0);
-            if (userInput == 'Y' || userInput == 'y') {
+            String userInput = System.console().readLine();
+            if (userInput.charAt(0) == 'Y' || userInput.charAt(0) == 'y') {
                 activeWorkSpace.getMarkdownFile().save();
             }
-            scanner.close();
 
             activeWorkSpace.getMarkdownFile().setClean();
         }
@@ -124,7 +122,7 @@ public class WorkSpaceManager {
 
    
 
-    public static void init() {
+    public static void init() throws Exception {
         WorkSpaceMemento memento = WorkSpaceMemento.recoverFromJsonFile();
         if (memento == null) {
             workSpaces = new ArrayList<WorkSpace>();
@@ -134,6 +132,15 @@ public class WorkSpaceManager {
         workSpaces = memento.getWorkSpaces();
         activeWorkSpace = memento.getActiveWorkSpace();
 
+    }
+
+    public static boolean isOpen(String string) {
+        for (WorkSpace workSpace : workSpaces) {
+            if (workSpace.getName().equals(string)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

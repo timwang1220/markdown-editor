@@ -6,11 +6,12 @@ import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-
+import com.timwang.tools.Tools;
 import com.timwang.workspace.WorkSpace;
 
 public class WorkSpaceMemento implements Memento {
@@ -53,7 +54,10 @@ public class WorkSpaceMemento implements Memento {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("workspaces", jsonArray);
-        jsonObject.put("activeworkspace", activeWorkSpace.toJsonString());
+        if (activeWorkSpace == null) {
+           jsonObject.put("activeworkspace", null);
+        }
+        else jsonObject.put("activeworkspace", activeWorkSpace.toJsonString());
         return jsonObject.toJSONString();
     }
 
@@ -64,14 +68,15 @@ public class WorkSpaceMemento implements Memento {
         WorkSpaceMemento memento = new WorkSpaceMemento();
         JSONObject jsonObject = JSON.parseObject(jsonString);
         String activeWorkSpaceString = jsonObject.getString("activeworkspace");
-        String activeWorkSpaceName = JSONObject.parseObject(activeWorkSpaceString).getString("name");
+        String activeWorkSpaceName = (activeWorkSpaceString == null) ? null: JSONObject.parseObject(activeWorkSpaceString).getString("name");
         JSONArray jsonArray = jsonObject.getJSONArray("workspaces");
         memento.workSpaces = new ArrayList<WorkSpace>();
+        memento.activeWorkSpace = null;
         for (int i = 0; i < jsonArray.size(); i++) {
             String workSpaceString = jsonArray.getString(i);
             WorkSpace workSpace = WorkSpace.fromJsonString(workSpaceString);
             memento.workSpaces.add(workSpace);
-            if (activeWorkSpaceName.equals(workSpace.getName())) {
+            if (activeWorkSpaceName !=null && activeWorkSpaceName.equals(workSpace.getName())) {
                 memento.activeWorkSpace = workSpace;
             }
         }
@@ -79,7 +84,8 @@ public class WorkSpaceMemento implements Memento {
         return memento;
     }
 
-    public static WorkSpaceMemento recoverFromJsonFile(){
+    public static WorkSpaceMemento recoverFromJsonFile() throws Exception{
+        Tools.createFileIfNotExists(WORKSPACE_LOG);
         try (BufferedReader br = new BufferedReader(new FileReader(WORKSPACE_LOG))) {
             String jsonString = br.readLine();
             return fromJsonString(jsonString);
@@ -88,8 +94,11 @@ public class WorkSpaceMemento implements Memento {
         }
         return null;
     }
-    public void saveToDisk() {
-        // saveTo WORKSPACE_LOG
+    public void saveToDisk() throws Exception {
+        Tools.createFileIfNotExists(WORKSPACE_LOG);
+        if (workSpaces == null || workSpaces.size() == 0) {
+            return;
+        }
         try (FileWriter fileWriter = new FileWriter(WORKSPACE_LOG)) {
             fileWriter.write(toJsonString());
         } catch (Exception e) {

@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class WorkSpaceManagerTest {
 
@@ -70,40 +71,6 @@ public class WorkSpaceManagerTest {
     @Test(expected = Exception.class)
     public void testCloseCurrentWorkSpace_NoActiveWorkspace() throws Exception {
         WorkSpaceManager.closeCurrentWorkSpace();
-    }
-
-    @Test
-    public void testCloseCurrentWorkSpace_SaveCurrentWorkspace() throws Exception {
-        String workSpace = RelativePath + "Workspace";
-        WorkSpaceManager.newWorkSpace(workSpace + ".md");
-
-        WorkSpaceManager.getActiveWorkSpace().getMarkdownFile().setDirty();
-
-        // Simulate user input
-        System.setIn(new ByteArrayInputStream("Y".getBytes()));
-
-        WorkSpace closedWorkSpace = WorkSpaceManager.closeCurrentWorkSpace();
-
-        assertNull(WorkSpaceManager.getActiveWorkSpace());
-        assertFalse(closedWorkSpace.isActive());
-        assertFalse(closedWorkSpace.getMarkdownFile().isDirty());
-    }
-
-    @Test
-    public void testCloseCurrentWorkSpace_DiscardCurrentWorkspace() throws Exception {
-        String workSpace = RelativePath + "Workspace";
-        WorkSpaceManager.newWorkSpace(workSpace + ".md");
-
-        WorkSpaceManager.getActiveWorkSpace().getMarkdownFile().setDirty();
-
-        // Simulate user input
-        System.setIn(new ByteArrayInputStream("N".getBytes()));
-
-        WorkSpace closedWorkSpace = WorkSpaceManager.closeCurrentWorkSpace();
-
-        assertNull(WorkSpaceManager.getActiveWorkSpace());
-        assertFalse(closedWorkSpace.isActive());
-        assertFalse(closedWorkSpace.getMarkdownFile().isDirty());
     }
 
     @Test

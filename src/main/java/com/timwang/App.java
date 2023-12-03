@@ -12,7 +12,12 @@ import com.timwang.workspace.WorkSpaceManager;
  */
 public class App {
     public static void main(String[] args){
-        WorkSpaceManager.init();
+        try {
+            WorkSpaceManager.init();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         while (true) {
             try {
                 System.out.print(">");

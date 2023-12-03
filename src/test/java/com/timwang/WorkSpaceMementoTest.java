@@ -26,10 +26,10 @@ public class WorkSpaceMementoTest {
     @Before
     public void setUp() throws Exception {
         WorkSpaceManager.clear();
-        WorkSpaceManager.newWorkSpace(TEST_DIR + "test1.md");
-        WorkSpaceManager.newWorkSpace(TEST_DIR + "test2.md");
-        WorkSpaceManager.newWorkSpace(TEST_DIR + "test3.md");
-        WorkSpaceManager.switchWorkSpace(TEST_DIR + "test2");
+        WorkSpaceManager.newWorkSpace(TEST_DIR + "mytest1.md");
+        WorkSpaceManager.newWorkSpace(TEST_DIR + "mytest2.md");
+        WorkSpaceManager.newWorkSpace(TEST_DIR + "mytest3.md");
+        WorkSpaceManager.switchWorkSpace(TEST_DIR + "mytest2");
     }
 
     @Test
@@ -38,9 +38,9 @@ public class WorkSpaceMementoTest {
         ArrayList<WorkSpace> workSpaces = memento.getWorkSpaces();
         assertNotNull(workSpaces);
         assertEquals(3, workSpaces.size());
-        assertEquals(TEST_DIR + "test1", workSpaces.get(0).getName());
-        assertEquals(TEST_DIR + "test1.md", workSpaces.get(0).getMarkdownFile().getFilename());
-        assertEquals(TEST_DIR + "test2", memento.getActiveWorkSpace().getName());
+        assertEquals(TEST_DIR + "mytest1", workSpaces.get(0).getName());
+        assertEquals(TEST_DIR + "mytest1.md", workSpaces.get(0).getMarkdownFile().getFilename());
+        assertEquals(TEST_DIR + "mytest2", memento.getActiveWorkSpace().getName());
     }
 
 
@@ -53,23 +53,23 @@ public class WorkSpaceMementoTest {
         ArrayList<WorkSpace> workSpaces = WorkSpaceManager.getAllWorkSpaces();
         assertNotNull(workSpaces);
         assertEquals(3, workSpaces.size());
-        assertEquals(TEST_DIR + "test1", workSpaces.get(0).getName());
-        assertEquals(TEST_DIR + "test1.md", workSpaces.get(0).getMarkdownFile().getFilename());
-        assertEquals(TEST_DIR + "test2", WorkSpaceManager.getActiveWorkSpace().getName());
+        assertEquals(TEST_DIR + "mytest1", workSpaces.get(0).getName());
+        assertEquals(TEST_DIR + "mytest1.md", workSpaces.get(0).getMarkdownFile().getFilename());
+        assertEquals(TEST_DIR + "mytest2", WorkSpaceManager.getActiveWorkSpace().getName());
         
     }
 
     @Test
     public void testRecoverUndoRedoStack() throws Exception{
         WorkSpaceManager.clear();
-        CommandExecutor.getInstance().execute(new LoadCommand(TEST_DIR + "test2.md"));
-        OperatingCommand command1 = new InsertCommand("1 # test1");
+        CommandExecutor.getInstance().execute(new LoadCommand(TEST_DIR + "mytest2.md"));
+        OperatingCommand command1 = new InsertCommand("1 # mytest1");
         OperatingCommand command2 = new DeleteCommand("1"); 
         CommandExecutor.getInstance().execute(command1);
         CommandExecutor.getInstance().execute(command2);
-         OperatingCommand command3 = new AppendHeadCommand("# test2");
+         OperatingCommand command3 = new AppendHeadCommand("# mytest2");
         CommandExecutor.getInstance().execute(command3);
-        OperatingCommand command4 = new DeleteCommand("test2");
+        OperatingCommand command4 = new DeleteCommand("mytest2");
         CommandExecutor.getInstance().execute(command4);
         CommandExecutor.getInstance().execute(new SaveCommand(""));
         WorkSpaceMemento memento = WorkSpaceManager.backUp();

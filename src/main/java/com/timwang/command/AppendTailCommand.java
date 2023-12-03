@@ -14,6 +14,9 @@ public class AppendTailCommand extends OperatingCommand{
         this.content = args;
         
     }
+    public AppendTailCommand(ArrayList<OperatingTuple> operatingTuples){
+        super(operatingTuples);
+    }
 
     @Override
     public void execute() throws Exception {
