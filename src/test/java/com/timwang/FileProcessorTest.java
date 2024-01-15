@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.timwang.markdown.MarkdownRoot;
 import com.timwang.markdown.MarkdownTitle;
-import com.timwang.Processor.FileProcessor;
+import com.timwang.processor.FileProcessor;
 
 public class FileProcessorTest {
     private static final String IN_FILE_PATH = "./src/test/resources/testin.md";

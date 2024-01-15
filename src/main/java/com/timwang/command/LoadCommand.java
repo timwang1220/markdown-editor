@@ -1,6 +1,6 @@
 package com.timwang.command;
 
-import com.timwang.markdown.MarkdownFile;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class LoadCommand extends FileCommand{
     private String filename;
@@ -11,15 +11,11 @@ public class LoadCommand extends FileCommand{
 
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile != null) {
-            FileCommand.operatingFile.close();
-        }
-        FileCommand.operatingFile = new MarkdownFile(filename);
-        
+        // if (FileCommand.operatingFile != null) {
+        //     FileCommand.operatingFile.close();
+        // }
+        // FileCommand.operatingFile = new MarkdownFile(filename);
+        WorkSpaceManager.newWorkSpace(filename);
     }
-    @Override
-    public void maintainStack() throws Exception {
-        CommandExecutor.undoStack.clear();
-        CommandExecutor.redoStack.clear(); 
-    }
+  
 }

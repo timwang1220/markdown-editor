@@ -4,5 +4,6 @@
         "name": "myTestConfig",
         "vmArgs": ["-Xmx512M"],
         "env": {"key":"value"}
-    }
+    },
+    "java.debug.settings.onBuildFailureProceed": true
 }

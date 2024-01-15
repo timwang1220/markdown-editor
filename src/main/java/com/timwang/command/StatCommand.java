@@ -1,6 +1,6 @@
 package com.timwang.command;
 
-import com.timwang.log.Stat;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class StatCommand extends FileCommand{
     boolean showCurrent;
@@ -9,23 +9,17 @@ public class StatCommand extends FileCommand{
         if (args.equals("all")) {
             showCurrent = false;
         }
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     }
-
+    public boolean isShowCurrent() {
+        return showCurrent;
+    }
 
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        if (operatingFile == null) {
             throw new Exception("No file has been opened.");
         }
-        if (showCurrent) {
-            Stat.showCurrentState(FileCommand.operatingFile);
-        } else {
-            Stat.showAllState(FileCommand.operatingFile);
-        }
-    }
-
-    public void maintainStack() throws Exception {
-        return;  
     }
     
 }

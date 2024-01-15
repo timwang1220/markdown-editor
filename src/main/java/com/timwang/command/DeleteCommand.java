@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 import com.timwang.markdown.MarkdownComposite;
 import com.timwang.markdown.MarkdownLine;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class DeleteCommand extends OperatingCommand{
     private int deleteLineNum;
@@ -22,19 +23,23 @@ public class DeleteCommand extends OperatingCommand{
         this.operatingTuples = new ArrayList<OperatingTuple>();
     }
 
+    public DeleteCommand(ArrayList<OperatingTuple> operatingTuples){
+        super(operatingTuples);
+    }
 
 
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
         if (deleteLineNum != -1){
-            MarkdownLine line = FileCommand.operatingFile.deleteByLineNum(deleteLineNum);
+            MarkdownLine line = operatingFile.deleteByLineNum(deleteLineNum);
             this.operatingTuples.add(new OperatingTuple(deleteLineNum, line));
         }
         else{
-            TreeMap<Integer,MarkdownLine> deletedMap = FileCommand.operatingFile.deleteByString(deleteContent);
+            TreeMap<Integer,MarkdownLine> deletedMap = operatingFile.deleteByString(deleteContent);
             for (Integer lineNum : deletedMap.keySet()){
                 this.operatingTuples.add(new OperatingTuple(lineNum, deletedMap.get(lineNum)));
             }
@@ -45,13 +50,14 @@ public class DeleteCommand extends OperatingCommand{
 
     @Override
     public void undo() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
         for (OperatingTuple operatingTuple : this.operatingTuples){
             MarkdownLine line = operatingTuple.getContent();
             if (line instanceof MarkdownComposite) ((MarkdownComposite)line).clear();
-            FileCommand.operatingFile.insert(operatingTuple.getLineNum(), operatingTuple.getContent());
+            operatingFile.insert(operatingTuple.getLineNum(), operatingTuple.getContent());
         }
     }
 
@@ -59,12 +65,13 @@ public class DeleteCommand extends OperatingCommand{
 
     @Override
     public void redo() throws Exception {
-        if (FileCommand.operatingFile == null) {
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
+        if (operatingFile == null) {
             throw new Exception("No file is opening");
         }
         int count = 0;
         for (OperatingTuple operatingTuple : this.operatingTuples){
-            FileCommand.operatingFile.deleteByLineNum(operatingTuple.getLineNum() - count);
+            operatingFile.deleteByLineNum(operatingTuple.getLineNum() - count);
             count++;
         }
     }

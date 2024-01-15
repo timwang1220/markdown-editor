@@ -1,4 +1,4 @@
-package com.timwang.Processor;
+package com.timwang.processor;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ public class FileProcessor {
         // open the file and read each line, invoke StringToMDLine
         // and add the line to the root
         // use utf-8
-        Tools.createFileIFNotExists(filePath);
+        Tools.createFileIfNotExists(filePath);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
             String line;
             int lineNumber = 1;

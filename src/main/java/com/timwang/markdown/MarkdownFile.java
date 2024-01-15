@@ -7,18 +7,19 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
-import com.timwang.Processor.FileProcessor;
-import com.timwang.log.Stat;
+import com.timwang.processor.FileProcessor;
 
 public class MarkdownFile {
     private String filename;
     private MarkdownRoot root;
     private LocalDateTime openFileTime;
+    private boolean dirty;
 
     public MarkdownFile(String filename) throws Exception {
         openFileTime = LocalDateTime.now();
         this.filename = filename;
         this.root = new MarkdownRoot();
+        this.dirty = false;
         FileProcessor.initFile(filename, root);
     }
     public void insert(int lineNum, MarkdownLine line) throws Exception {
@@ -33,6 +34,12 @@ public class MarkdownFile {
         root.appendLine(line);
         return root.getLineCount();
     }
+
+    public void updateOpenTime(){
+        openFileTime = LocalDateTime.now();
+    }    
+
+
     public MarkdownLine deleteByLineNum(int lineNum) throws Exception{
         return root.deleteByLineNum(lineNum);
     }
@@ -46,9 +53,6 @@ public class MarkdownFile {
         root.deleteByString(line, getFileLine());
         return lineMap;
     }
-    public void close(){
-        Stat.closeFile(this);
-    }
     public int getFileLine(){
         return root.getLineCount();
     }
@@ -60,6 +64,15 @@ public class MarkdownFile {
     }
     public String getFilename(){
         return filename;
+    }
+    public boolean isDirty(){
+        return dirty;
+    }
+    public void setClean(){
+        this.dirty = false;
+    }
+    public void setDirty(){
+        this.dirty = true;
     }
 
 }

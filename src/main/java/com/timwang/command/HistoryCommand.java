@@ -22,8 +22,5 @@ public class HistoryCommand implements Command {
         }
 
     }
-    public void maintainStack() {
-        return;
-    }
 
 }

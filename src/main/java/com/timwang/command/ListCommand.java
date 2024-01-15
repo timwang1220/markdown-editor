@@ -1,18 +1,20 @@
 package com.timwang.command;
 
-import com.timwang.display.Display;
-import com.timwang.display.ListDisplay;
+import com.timwang.filedisplay.Display;
+import com.timwang.filedisplay.ListDisplay;
+import com.timwang.workspace.WorkSpaceManager;
 
 public class ListCommand extends FileCommand {
     private Display listDisplay;
     public ListCommand(String args){
         listDisplay = new ListDisplay();
+        this.operatingFile = WorkSpaceManager.getActiveWorkSpace().getMarkdownFile();
     };
     @Override
     public void execute() throws Exception {
-        if (FileCommand.operatingFile == null)
+        if (operatingFile == null)
             throw new Exception("No file is loaded");
-        listDisplay.display(FileCommand.operatingFile.getRoot());
+        listDisplay.display(operatingFile.getRoot());
     }
     
 }
